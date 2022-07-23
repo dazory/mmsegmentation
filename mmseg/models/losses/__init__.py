@@ -7,6 +7,8 @@ from .focal_loss import FocalLoss
 from .lovasz_loss import LovaszLoss
 from .utils import reduce_loss, weight_reduce_loss, weighted_loss
 
+from .ai28 import *
+
 __all__ = [
     'accuracy', 'Accuracy', 'cross_entropy', 'binary_cross_entropy',
     'mask_cross_entropy', 'CrossEntropyLoss', 'reduce_loss',
