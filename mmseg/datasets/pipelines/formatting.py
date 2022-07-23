@@ -199,11 +199,21 @@ class DefaultFormatBundle(object):
         """
 
         if 'img' in results:
-            img = results['img']
-            if len(img.shape) < 3:
-                img = np.expand_dims(img, -1)
-            img = np.ascontiguousarray(img.transpose(2, 0, 1))
-            results['img'] = DC(to_tensor(img), stack=True)
+            for key in results.get('img_fields', ['img']):
+                img = results[key]
+                if len(img.shape) < 3:
+                    img = np.expand_dims(img, -1)
+                img = np.ascontiguousarray(img.transpose(2, 0, 1))
+                results[key] = DC(to_tensor(img), stack=True)
+
+        ## Original code is below:
+        # if 'img' in results:
+        #     img = results['img']
+        #     if len(img.shape) < 3:
+        #         img = np.expand_dims(img, -1)
+        #     img = np.ascontiguousarray(img.transpose(2, 0, 1))
+        #     results['img'] = DC(to_tensor(img), stack=True)
+
         if 'gt_semantic_seg' in results:
             # convert to long
             results['gt_semantic_seg'] = DC(

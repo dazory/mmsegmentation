@@ -135,6 +135,14 @@ class BaseSegmentor(BaseModule, metaclass=ABCMeta):
                 DDP, it means the batch size on each GPU), which is used for
                 averaging the logs.
         """
+        if 'img2' in list(data_batch.keys()) or 'img3' in list(data_batch.keys()):
+            # concatenate the original image and augmix images.
+            data_batch['img'] = torch.cat((data_batch['img'], data_batch['img2'], data_batch['img3']), dim=0)
+            data_batch['gt_semantic_seg'] = torch.cat((data_batch['gt_semantic_seg'], data_batch['gt_semantic_seg'], data_batch['gt_semantic_seg']), dim=0)
+            data_batch['img_metas'] += data_batch['img_metas'] + data_batch['img_metas']
+            del data_batch['img2']
+            del data_batch['img3']
+
         losses = self(**data_batch)
         loss, log_vars = self._parse_losses(losses)
 
