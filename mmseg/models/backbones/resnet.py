@@ -659,6 +659,8 @@ class ResNet(BaseModule):
     def forward(self, x):
         """Forward function."""
         if self.deep_stem:
+            import torch
+            x = x.to(dtype=torch.float32)
             x = self.stem(x)
         else:
             x = self.conv1(x)
